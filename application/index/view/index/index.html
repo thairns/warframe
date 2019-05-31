@@ -6,49 +6,171 @@
     <script src="__JS__/vue.min.js"></script>
 </head>
 <body>
-    <div id="main">
-       {{sortie.id}}<br/>
-       {{fissures}}<br/>
-       {{invasions}}<br/>
-       {{syndicateMissions}}<br/>
-       {{cetusCycle}}<br/>
-       {{vallisCycle}}<br/>
-       {{voidTrader}}<br/>
+<div id="main">
+    <div id="syndicateMissions">
+    <!--<div>{{syndicateMissions}}</div>-->
     </div>
-<script>
-    //突击：一日一更
-    var sortie = JSON.parse('{$sortie}');
-   //计时重置
-    //裂隙
-    var fissures = JSON.parse('{$fissures}');
-    //入侵
-    var invasions = JSON.parse('{$invasions}');
-    //希图斯日常
-    var syndicateMissions = JSON.parse('{$syndicateMissions}');
-    //希图斯昼夜
-    var cetusCycle = JSON.parse('{$cetusCycle}');
-    //福图纳冷暖
-    var vallisCycle = JSON.parse('{$vallisCycle}');
-    //虚空商人
-    var voidTrader = JSON.parse('{$voidTrader}');
 
+    <div id="sortie">
+        <div>突击</div>
+        <div>{{timestamp2date(timeList.sortie)}}</div>
+        <div>
+            <div v-for="item in sortie.variants">
+                <p>
+                    <div>任务类型：{{item.missionType}}</div>
+                    <div>异常效果：{{item.modifier}}</div>
+                    <div>异常说明：{{item.modifierDescription}}</div>
+                    <div>地点：{{item.node}}</div>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div id="fissures">
+        <div>裂隙</div>
+        <div v-for="item in fissures">
+            <p>
+                <div>地点：{{item.node}}</div>
+                <div>派系：{{item.enemy}}</div>
+                <div>任务类型：{{item.missionType}}</div>
+                <div>纪元：{{item.tier}}(T{{item.tierNum}})</div>
+                <div>剩余时间：{{item.eta}}</div>
+            </p>
+        </div>
+    </div>
+    <div id="invasions">
+        <div>入侵</div>
+        <div v-for="item in invasions">
+            <p>
+            <div>地点：{{item.node}}</div>
+            <div>说明：{{item.desc}}</div>
+            <div v-if="!item.vsInfestation">
+                <div>进攻方</div>
+                <div>奖励：
+                    <div v-for="reward in item.attackerReward.countedItems">
+                        {{reward.count}}×{{reward.type}}
+                    </div>
+                </div>
+                <div>派系：{{item.attackingFaction}}</div>
+            </div>
+            <div>
+                <div>防守方</div>
+                <div>奖励：
+                    <div v-for="reward in item.defenderReward.countedItems">
+                        {{reward.count}}×{{reward.type}}
+                    </div>
+                </div>
+                <div>派系：{{item.defendingFaction}}</div>
+            </div>
+            </p>
+        </div>
+    </div>
+
+    <!--<div id="cetusCycle">-->
+    <!--<div>{{cetusCycle}}</div>-->
+    <!--</div>-->
+    <!--<div id="vallisCycle">-->
+    <!--<div>{{vallisCycle}}</div>-->
+    <!--</div>-->
+    <!--<div id="voidTrader">-->
+    <!--<div>{{timestamp2date(voidTrader)}}</div>-->
+    <!--</div>-->
+</div>
+<script>
     new Vue({
-        el:"#main",
-        data:{
-            sortie:sortie,
-            fissures:fissures,
-            invasions:invasions,
-            syndicateMissions:syndicateMissions,
-            cetusCycle:cetusCycle,
-            vallisCycle:vallisCycle,
-            voidTrader:voidTrader
+        el: "#main",
+        data: {
+            sortie: null,
+            fissures: null,
+            invasions: null,
+            syndicateMissions: null,
+            cetusCycle: null,
+            vallisCycle: null,
+            voidTrader: null,
+            timer: null,
+            timeList: null
         },
-        methods:{
-            str2date:function(expiry){
-                return expiry;
+        created() {
+            //突击：一日一更
+            let sortie = JSON.parse('{$sortie}');
+            //计时重置
+            //裂隙
+            let fissures = JSON.parse('{$fissures}');
+            //入侵
+            let invasions = JSON.parse('{$invasions}');
+            //希图斯日常
+            let syndicateMissions = JSON.parse('{$syndicateMissions}');
+            //希图斯昼夜
+            let cetusCycle = JSON.parse('{$cetusCycle}');
+            //福图纳冷暖
+            let vallisCycle = JSON.parse('{$vallisCycle}');
+            //虚空商人
+            let voidTrader = JSON.parse('{$voidTrader}');
+
+            let curTime = (new Date()).getTime();
+
+            let timeList = [];
+            timeList["sortie"] = this.str2timestamp(sortie['expiry']) - curTime;
+            timeList["fissures"] = this.str2timestamp(fissures['expiry']) - curTime;
+            timeList["invasions"] = this.str2timestamp(invasions['expiry']) - curTime;
+            timeList["syndicateMissions"] = this.str2timestamp(syndicateMissions['expiry']) - curTime;
+            timeList["cetusCycle"] = this.str2timestamp(cetusCycle['expiry']) - curTime;
+            timeList["vallisCycle"] = this.str2timestamp(vallisCycle['expiry']) - curTime;
+            timeList["voidTrader"] = this.str2timestamp(voidTrader['expiry']) - curTime;
+
+            this.sortie = sortie;
+            this.fissures = fissures;
+            this.invasions = invasions;
+            this.syndicateMissions = syndicateMissions;
+            this.sortie = sortie;
+            this.sortie = sortie;
+            this.sortie = sortie;
+            this.timeList = timeList;
+        },
+        mounted() {
+            let list = [
+                "cetusCycle", "fissures",
+                "invasions", "sortie",
+                "syndicateMissions", "vallisCycle",
+                "voidTrader"
+            ];
+            this.startInterval();
+        },
+        methods: {
+            str2timestamp: function (time) {
+                if (!time) {
+                    time = 0;
+                }
+                return Date.parse(time);
+            },
+            timestamp2date: function (time) {
+                let date = "";
+                time = Math.floor(time / 1000);
+                let hour = Math.floor(time / 3600);
+                if (hour > 24) {
+                    hour = hour % 24;
+                }
+                let minute = Math.floor(time % 3600 / 60);
+                let second = Math.floor(time % 60);
+
+                date = date + hour + "时 " + minute + "分 " + second + "秒 ";
+                return date;
+            },
+            //倒计时：根据时间数组倒计时
+            countdown: function () {
+                let temp = [];
+                for (let key in this.timeList) {
+                    temp[key] = this.timeList[key] - 1000;
+                }
+                this.timeList = temp;
+            },
+            startInterval: function () {
+                console.log("启动定时器");
+                this.timer = setInterval(this.countdown, 1000);
             }
         }
-    })
+    });
+
+
 </script>
 </body>
 </html>

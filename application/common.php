@@ -19,7 +19,7 @@ function curl($url, $post=''){
     curl_setopt($curl, CURLOPT_USERAGENT, 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/6.0)');
     curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
     curl_setopt($curl, CURLOPT_AUTOREFERER, 1);
-    curl_setopt($curl, CURLOPT_REFERER, "https://www.thairns.com");
+//    curl_setopt($curl, CURLOPT_REFERER, "https://www.thairns.com");
     if($post) {
         curl_setopt($curl, CURLOPT_POST, 1);
         curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($post));
@@ -44,6 +44,7 @@ function cron($type){
             Db::table("source")->insert([
                 "id"        =>  $type,
                 "context"   =>  $data
+//                "context"   =>  config("url.api_host").config("interface.".$type)
             ]);
             return addslashes($data);
         }
