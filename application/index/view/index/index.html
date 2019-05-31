@@ -3,9 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script src="__JS__/vue.min.js"></script>
 </head>
 <body>
-{$context}
+    <div id="main">
+       {{sortie.id}}<br/>
+       {{fissures}}<br/>
+       {{invasions}}<br/>
+       {{syndicateMissions}}<br/>
+       {{cetusCycle}}<br/>
+       {{vallisCycle}}<br/>
+       {{voidTrader}}<br/>
+    </div>
+<script>
+    //突击：一日一更
+    var sortie = JSON.parse('{$sortie}');
+   //计时重置
+    //裂隙
+    var fissures = JSON.parse('{$fissures}');
+    //入侵
+    var invasions = JSON.parse('{$invasions}');
+    //希图斯日常
+    var syndicateMissions = JSON.parse('{$syndicateMissions}');
+    //希图斯昼夜
+    var cetusCycle = JSON.parse('{$cetusCycle}');
+    //福图纳冷暖
+    var vallisCycle = JSON.parse('{$vallisCycle}');
+    //虚空商人
+    var voidTrader = JSON.parse('{$voidTrader}');
 
+    new Vue({
+        el:"#main",
+        data:{
+            sortie:sortie,
+            fissures:fissures,
+            invasions:invasions,
+            syndicateMissions:syndicateMissions,
+            cetusCycle:cetusCycle,
+            vallisCycle:vallisCycle,
+            voidTrader:voidTrader
+        },
+        methods:{
+            str2date:function(expiry){
+                return expiry;
+            }
+        }
+    })
+</script>
 </body>
 </html>

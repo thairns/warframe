@@ -141,7 +141,11 @@ return [
     ],
 
     // 视图输出字符串内容替换
-    'view_replace_str'       => [],
+    'view_replace_str'       => [
+        '__CSS__'   => 'public'. DS . 'static'. DS . 'css',
+        '__JS__'   => 'public'. DS . 'static'. DS . 'js',
+        '__IMG__'   => 'public'. DS . 'static'. DS . 'img'
+    ],
     // 默认跳转页面对应的模板文件
     'dispatch_success_tmpl'  => THINK_PATH . 'tpl' . DS . 'dispatch_jump.tpl',
     'dispatch_error_tmpl'    => THINK_PATH . 'tpl' . DS . 'dispatch_jump.tpl',
@@ -238,4 +242,42 @@ return [
         'var_page'  => 'page',
         'list_rows' => 15,
     ],
+
+    //标记
+    'flag'      =>[
+        'interval'  =>  false
+    ],
+
+    //warframe接口
+    'interface' =>  [
+        "pc"                    =>  "pc",
+        "cetusCycle"            =>  "pc/cetusCycle",        //希图斯昼夜
+        "constructionProgress"  =>  "pc/constructionProgress",//巨刃&豺狼
+        "dailyDeals"            =>  "pc/dailyDeals",        //Darvo每日特惠
+        "earthCycle"            =>  "pc/earthCycle",        //地球昼夜
+        "events"                =>  "pc/events",            //活动
+        "fissures"              =>  "pc/fissures",          //裂隙
+        "flashSales"            =>  "pc/flashSales",        //商店特惠
+        "globalUpgrades"        =>  "pc/globalUpgrades",    //活动buff？
+        "invasions"             =>  "pc/invasions",         //入侵任务
+        "news"                  =>  "pc/news",              //新闻
+        "nightwave"             =>  "pc/nightwave",         //土星之狼？
+        "rivens"                =>  "pc/rivens",//武器紫卡倾向？        /rivens/search/{weapons}
+        "sortie"                =>  "pc/sortie",            //突击
+        "syndicateMissions"     =>  "pc/syndicateMissions", //希图斯日常任务
+        "timestamp"             =>  "pc/timestamp",         //最近一次生成世界数据时间
+        "vallisCycle"           =>  "pc/vallisCycle",       //福图纳冷热循环
+        "voidTrader"            =>  "pc/voidTrader",        //虚空商人
+
+        "arcanes"               =>  "arcanes",              //赋能
+        "fissureModifiers"      =>  "fissureModifiers",     //裂隙翻译转换
+        "factions"              =>  "factions",             //阵营转换
+        "missionTypes"          =>  "missionTypes",         //任务标记识别
+        "warframes"             =>  "warframes",            //战甲
+        "weapons"               =>  "weapons"               //武器
+    ],
+
+    'url'   =>  [
+        'api_host'  =>  'https://api.warframestat.us/'
+    ]
 ];

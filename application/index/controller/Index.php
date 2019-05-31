@@ -7,10 +7,19 @@ class Index extends Controller
 {
     public function index()
     {
-        $this->assign("context","This is the value");
+        $list = [
+            "cetusCycle","fissures",
+            "invasions","sortie",
+            "syndicateMissions","vallisCycle",
+            "voidTrader"
+        ];
+        foreach($list as  $tmp){
+            $this->assign($tmp,cron($tmp));
+        }
         return $this->fetch();
     }
     public function hello(){
-        return "hello";
+       $this->assign("result","stop interval success<br>");
+        return $this->fetch();
     }
 }
