@@ -248,6 +248,11 @@ return [
         'interval'  =>  false
     ],
 
+    //domain
+    'domain'    =>  'www.thairns.com',
+    //servlet
+    'servlet'   =>  'warframe',
+
     //warframe接口
     'interface' =>  [
         "pc"                    =>  "pc",

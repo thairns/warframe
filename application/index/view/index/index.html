@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script src="__JS__/jquery-3.4.1.min.js"></script>
     <script src="__JS__/vue.min.js"></script>
 </head>
 <body>
@@ -15,19 +16,19 @@
         <div>突击</div>
         <div>{{timestamp2date(timeList.sortie)}}</div>
         <div>
-            <div v-for="item in sortie.variants">
+            <div v-for="item in source.sortie.variants">
                 <p>
-                    <div>任务类型：{{item.missionType}}</div>
-                    <div>异常效果：{{item.modifier}}</div>
-                    <div>异常说明：{{item.modifierDescription}}</div>
-                    <div>地点：{{item.node}}</div>
+                <div>任务类型：{{item.missionType}}</div>
+                <div>异常效果：{{item.modifier}}</div>
+                <div>异常说明：{{item.modifierDescription}}</div>
+                <div>地点：{{item.node}}</div>
                 </p>
             </div>
         </div>
     </div>
     <div id="fissures">
         <div>裂隙</div>
-        <div v-for="item in fissures">
+        <div v-for="item in source.fissures">
             <p>
                 <div>地点：{{item.node}}</div>
                 <div>派系：{{item.enemy}}</div>
@@ -39,7 +40,7 @@
     </div>
     <div id="invasions">
         <div>入侵</div>
-        <div v-for="item in invasions">
+        <div v-for="item in source.invasions">
             <p>
             <div>地点：{{item.node}}</div>
             <div>说明：{{item.desc}}</div>
@@ -79,63 +80,54 @@
     new Vue({
         el: "#main",
         data: {
-            sortie: null,
-            fissures: null,
-            invasions: null,
-            syndicateMissions: null,
-            cetusCycle: null,
-            vallisCycle: null,
-            voidTrader: null,
+            servlet:'{$servlet}',
+            source:null,
             timer: null,
-            timeList: null
+            timeList: null,
+            num:5
         },
         created() {
-            //突击：一日一更
-            let sortie = JSON.parse('{$sortie}');
-            //计时重置
-            //裂隙
-            let fissures = JSON.parse('{$fissures}');
-            //入侵
-            let invasions = JSON.parse('{$invasions}');
-            //希图斯日常
-            let syndicateMissions = JSON.parse('{$syndicateMissions}');
-            //希图斯昼夜
-            let cetusCycle = JSON.parse('{$cetusCycle}');
-            //福图纳冷暖
-            let vallisCycle = JSON.parse('{$vallisCycle}');
-            //虚空商人
-            let voidTrader = JSON.parse('{$voidTrader}');
-
-            let curTime = (new Date()).getTime();
-
-            let timeList = [];
-            timeList["sortie"] = this.str2timestamp(sortie['expiry']) - curTime;
-            timeList["fissures"] = this.str2timestamp(fissures['expiry']) - curTime;
-            timeList["invasions"] = this.str2timestamp(invasions['expiry']) - curTime;
-            timeList["syndicateMissions"] = this.str2timestamp(syndicateMissions['expiry']) - curTime;
-            timeList["cetusCycle"] = this.str2timestamp(cetusCycle['expiry']) - curTime;
-            timeList["vallisCycle"] = this.str2timestamp(vallisCycle['expiry']) - curTime;
-            timeList["voidTrader"] = this.str2timestamp(voidTrader['expiry']) - curTime;
-
-            this.sortie = sortie;
-            this.fissures = fissures;
-            this.invasions = invasions;
-            this.syndicateMissions = syndicateMissions;
-            this.sortie = sortie;
-            this.sortie = sortie;
-            this.sortie = sortie;
-            this.timeList = timeList;
-        },
-        mounted() {
             let list = [
                 "cetusCycle", "fissures",
                 "invasions", "sortie",
                 "syndicateMissions", "vallisCycle",
                 "voidTrader"
             ];
-            this.startInterval();
+            //取到所有数据
+            let source = {$source};
+            for(let tmp in source){
+                source[tmp] = JSON.parse(source[tmp]);
+            }
+            this.source = source;
+            timeList = new Array();
+            for(let tmp in source){
+                timeList[tmp] = this.getTime(source[tmp],timeList[tmp],"expiry");
+            }
+            console.log(timeList);
+        },
+        mounted() {
+
+            // this.startInterval();
         },
         methods: {
+            getTime:function(obj,list,key){
+                if(obj instanceof Array){
+                    list = new Array();
+                    for(let tmp in obj){
+                        list[tmp] = this.getTime(obj[tmp],list[tmp],key);
+                        if(!list[tmp]){
+                            delete list[tmp];
+                        }
+                    }
+                }else{
+                    if(obj[key]){
+                        list = obj[key];
+                    }else{
+                        return null;
+                    }
+                }
+                return list;
+            },
             str2timestamp: function (time) {
                 if (!time) {
                     time = 0;
@@ -160,6 +152,18 @@
                 let temp = [];
                 for (let key in this.timeList) {
                     temp[key] = this.timeList[key] - 1000;
+                    if(temp[key] < 0 && this.num > 0){
+                        this.num --;
+                        console.log(temp[key]);
+                        $.ajax({
+                            url:this.servlet + "index/index/updateInterval?key="+key,
+                            method:"get",
+                            success:res=>{
+                                console.log(res);
+                            }
+                        });
+                        continue;
+                    }
                 }
                 this.timeList = temp;
             },

@@ -34,21 +34,26 @@ function curl($url, $post=''){
     return $data;
 }
 //定时任务
-function cron($type){
+function cron($type,$flag = false){
 
     try {
         $data = Db::table("source")->where("id", $type)->find();
-        if (!$data) {
+        if (!$data || $flag) {
             $data = curl(config("url.api_host").config("interface.".$type));
 
-            Db::table("source")->insert([
-                "id"        =>  $type,
-                "context"   =>  $data
-//                "context"   =>  config("url.api_host").config("interface.".$type)
-            ]);
-            return addslashes($data);
+            if($data){
+                Db::table("source")->where('id',$type)->update(["context"=>$data]);
+            }else {
+                Db::table("source")->insert([
+                    "id" => $type,
+                    "context" => $data
+                ]);
+            }
+            return $data;
+//            return addslashes($data);
         }
-        return addslashes($data["context"]);
+        return $data["context"];
+//        return addslashes($data["context"]);
     }catch (Exception $e){
         return $e->getMessage();
     }
