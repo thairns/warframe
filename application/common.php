@@ -39,21 +39,19 @@ function cron($type,$flag = false){
     try {
         $data = Db::table("source")->where("id", $type)->find();
         if (!$data || $flag) {
-            $data = curl(config("url.api_host").config("interface.".$type));
+            $result = curl(config("url.api_host").config("interface.".$type));
 
             if($data){
                 Db::table("source")->where('id',$type)->update(["context"=>$data]);
             }else {
                 Db::table("source")->insert([
                     "id" => $type,
-                    "context" => $data
+                    "context" => $result
                 ]);
             }
-            return $data;
-//            return addslashes($data);
+            return $result;
         }
         return $data["context"];
-//        return addslashes($data["context"]);
     }catch (Exception $e){
         return $e->getMessage();
     }

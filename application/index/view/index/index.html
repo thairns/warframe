@@ -99,41 +99,46 @@
                 source[tmp] = JSON.parse(source[tmp]);
             }
             this.source = source;
-            timeList = new Array();
-            for(let tmp in source){
-                timeList[tmp] = this.getTime(source[tmp],timeList[tmp],"expiry");
-            }
-            console.log(timeList);
+            timeList = [];
+            //取出所有的时间
+            this.getTime(source,timeList,"expiry");
+            this.timeList = timeList;
         },
         mounted() {
-
-            // this.startInterval();
+            this.startInterval();
         },
         methods: {
+            /**
+             * 根据传入的key获取时间
+             * @param obj   需要获取时间对象
+             * @param list  时间对象集合
+             * @param key   需要获取的字段
+             * @returns {*}
+             */
             getTime:function(obj,list,key){
-                if(obj instanceof Array){
-                    list = new Array();
-                    for(let tmp in obj){
-                        list[tmp] = this.getTime(obj[tmp],list[tmp],key);
-                        if(!list[tmp]){
-                            delete list[tmp];
+                for(let tmp in obj){
+                    if(obj[tmp] instanceof Array){
+                        list[tmp] = [];
+                        this.getTime(obj[tmp],list[tmp],key);
+                    }else{
+                        if(obj[tmp][key]){
+                            list[tmp] = this.str2timestamp(obj[tmp][key]) - (new Date()).getTime();
                         }
                     }
-                }else{
-                    if(obj[key]){
-                        list = obj[key];
-                    }else{
-                        return null;
-                    }
                 }
-                return list;
             },
+            /**
+             * 将String格式日期转化为时间戳
+             */
             str2timestamp: function (time) {
                 if (!time) {
                     time = 0;
                 }
                 return Date.parse(time);
             },
+            /**
+             *  时间戳变更为当前时间戳，并格式化为字符串显示
+             */
             timestamp2date: function (time) {
                 let date = "";
                 time = Math.floor(time / 1000);
@@ -150,22 +155,47 @@
             //倒计时：根据时间数组倒计时
             countdown: function () {
                 let temp = [];
-                for (let key in this.timeList) {
-                    temp[key] = this.timeList[key] - 1000;
-                    if(temp[key] < 0 && this.num > 0){
-                        this.num --;
-                        console.log(temp[key]);
-                        $.ajax({
-                            url:this.servlet + "index/index/updateInterval?key="+key,
-                            method:"get",
-                            success:res=>{
-                                console.log(res);
-                            }
-                        });
-                        continue;
-                    }
+                let timeList = this.timeList;
+                // this.resolveTimeList(timeList,"source");
+                for(let tmp in timeList){
+                    temp[tmp] = this.resolveTimeList(timeList[tmp],tmp);
+                }
+                for(let tmp in timeList){
+                    temp[tmp] = timeList[tmp];
                 }
                 this.timeList = temp;
+            },
+            /**
+             * 将时间数组解析自减
+             */
+            resolveTimeList:function(time,key){
+                for(let tmp in time){
+                    if(time[tmp] instanceof Array){
+                        this.resolveTimeList(time[tmp],tmp);
+                    }else{
+                        console.log(time,key);
+                        if(time[tmp]){
+                            time[tmp] -= 1000;
+                            if(time[tmp] < 0 && this.num > 0){
+                                this.num--;
+                                this.reflushSource(key);
+                            }
+                        }
+                    }
+                }
+            },
+            /**
+             *  当时间失效时，强制更新时间
+             */
+            reflushSource:function(key){
+                console.log("当前更新", this.servlet + "index/index/updateInterval?key="+key)
+                $.ajax({
+                    url:this.servlet + "index/index/updateInterval?key="+key,
+                    method:"get",
+                    success:res=>{
+                        console.log(res);
+                    }
+                })
             },
             startInterval: function () {
                 console.log("启动定时器");
