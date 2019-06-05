@@ -22,8 +22,9 @@ class Index extends Controller
         return $this->fetch();
     }
 
-    public function updateInterval($key){
-        return cron($key,true);
+    public function updateInterval(){
+        $key = input("get.key");
+        return json_encode(cron($key,true));
     }
     public function hello(){
        $this->assign("result","stop interval success<br>");

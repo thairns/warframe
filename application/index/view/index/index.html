@@ -3,78 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="__plugins__/bootstrap/css/bootstrap.css">
     <script src="__JS__/jquery-3.4.1.min.js"></script>
     <script src="__JS__/vue.min.js"></script>
+    <script src="__plugins__/bootstrap/js/bootstrap.js"></script>
+    <style type="text/css">
+    </style>
 </head>
 <body>
 <div id="main">
-    <div id="syndicateMissions">
-    <!--<div>{{syndicateMissions}}</div>-->
-    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div>集团</div>
+                <div v-for="item in source.syndicateMissions" class="col-md-6">
 
-    <div id="sortie">
-        <div>突击</div>
-        <div>{{timestamp2date(timeList.sortie)}}</div>
-        <div>
-            <div v-for="item in source.sortie.variants">
-                <p>
-                <div>任务类型：{{item.missionType}}</div>
-                <div>异常效果：{{item.modifier}}</div>
-                <div>异常说明：{{item.modifierDescription}}</div>
-                <div>地点：{{item.node}}</div>
-                </p>
+                </div>
             </div>
         </div>
-    </div>
-    <div id="fissures">
-        <div>裂隙</div>
-        <div v-for="item in source.fissures">
-            <p>
-                <div>地点：{{item.node}}</div>
-                <div>派系：{{item.enemy}}</div>
-                <div>任务类型：{{item.missionType}}</div>
-                <div>纪元：{{item.tier}}(T{{item.tierNum}})</div>
-                <div>剩余时间：{{item.eta}}</div>
-            </p>
-        </div>
-    </div>
-    <div id="invasions">
-        <div>入侵</div>
-        <div v-for="item in source.invasions">
-            <p>
-            <div>地点：{{item.node}}</div>
-            <div>说明：{{item.desc}}</div>
-            <div v-if="!item.vsInfestation">
-                <div>进攻方</div>
-                <div>奖励：
-                    <div v-for="reward in item.attackerReward.countedItems">
-                        {{reward.count}}×{{reward.type}}
+
+        <div class="row">
+            <div class="col-md -12">
+                <div class="row">
+                    <div id="cetusCycle">
+                        <div>希图斯</div>
+                        <div>距离{{source.cetusCycle.isDay?"黑夜":"白天"}}还有 {{timestamp2date(timeList.cetusCycle)}}</div>
                     </div>
                 </div>
-                <div>派系：{{item.attackingFaction}}</div>
+
+                    <div>konzo的工作</div>
+                    <div id="syndicateMissions">
+                        <div class="col-md-3">
+
+                        </div>
+                        <div>{{source.syndicateMissions}}</div>
+                    </div>
             </div>
-            <div>
-                <div>防守方</div>
-                <div>奖励：
-                    <div v-for="reward in item.defenderReward.countedItems">
-                        {{reward.count}}×{{reward.type}}
+        </div>
+
+        <div class="col-md-12">
+            <div class="col-md-6">
+                <div id="sortie">
+                    <div>突击</div>
+                    <div>{{timestamp2date(timeList.sortie)}}</div>
+                    <div>
+                        <div v-for="item in source.sortie.variants" class="col-md-4">
+                            <p>
+                            <div>任务类型：{{item.missionType}}</div>
+                            <div>异常效果：{{item.modifier}}</div>
+                            <div>异常说明：{{item.modifierDescription}}</div>
+                            <div>地点：{{item.node}}</div>
+                            </p>
+                        </div>
                     </div>
                 </div>
-                <div>派系：{{item.defendingFaction}}</div>
             </div>
-            </p>
         </div>
-    </div>
 
-    <!--<div id="cetusCycle">-->
-    <!--<div>{{cetusCycle}}</div>-->
-    <!--</div>-->
-    <!--<div id="vallisCycle">-->
-    <!--<div>{{vallisCycle}}</div>-->
-    <!--</div>-->
-    <!--<div id="voidTrader">-->
-    <!--<div>{{timestamp2date(voidTrader)}}</div>-->
-    <!--</div>-->
+
+
+        <div class="col-md-12">
+            <div class="col-md-10">
+                <div id="fissures">
+                    <div>裂隙</div>
+                    <div v-for="(item,index) in source.fissures" class="col-md-2">
+                        <p>
+                        <div>地点：{{item.node}}</div>
+                        <div>派系：{{item.enemy}}</div>
+                        <div>任务类型：{{item.missionType}}</div>
+                        <div>纪元：{{item.tier}}(T{{item.tierNum}})</div>
+                        <div>剩余时间：{{getTimeByIndex("fissures",index)}}</div>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="col-md-10">
+                <div id="invasions">
+                    <div>入侵</div>
+                    <div v-for="item in source.invasions" class="col-md-3">
+                        <p>
+                        <div>地点：{{item.node}}</div>
+                        <div>说明：{{item.desc}}</div>
+                        <div v-if="!item.vsInfestation">
+                            <div>进攻方</div>
+                            <div>奖励：
+                                <div v-for="reward in item.attackerReward.countedItems">
+                                    {{reward.count}}×{{reward.type}}
+                                </div>
+                            </div>
+                            <div>派系：{{item.attackingFaction}}</div>
+                        </div>
+                        <div>
+                            <div>防守方</div>
+                            <div>奖励：
+                                <div v-for="reward in item.defenderReward.countedItems">
+                                    {{reward.count}}×{{reward.type}}
+                                </div>
+                            </div>
+                            <div>派系：{{item.defendingFaction}}</div>
+                        </div>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!--<div id="vallisCycle">-->
+        <!--<div>{{vallisCycle}}</div>-->
+        <!--</div>-->
+        <!--<div id="voidTrader">-->
+        <!--<div>{{timestamp2date(voidTrader)}}</div>-->
+        <!--</div>-->
+    </div>
 </div>
 <script>
     new Vue({
@@ -82,32 +127,44 @@
         data: {
             servlet:'{$servlet}',
             source:null,
+            sourceFlag:false,
             timer: null,
             timeList: null,
+            requestList:[],
             num:5
         },
         created() {
-            let list = [
-                "cetusCycle", "fissures",
-                "invasions", "sortie",
-                "syndicateMissions", "vallisCycle",
-                "voidTrader"
-            ];
             //取到所有数据
             let source = {$source};
             for(let tmp in source){
-                source[tmp] = JSON.parse(source[tmp]);
+                try{
+                    source[tmp] = JSON.parse(source[tmp]);
+                }catch(e){
+                    console.log(tmp + "内容存在问题");
+                    this.reflushSource(tmp);
+                }
             }
             this.source = source;
-            timeList = [];
-            //取出所有的时间
-            this.getTime(source,timeList,"expiry");
-            this.timeList = timeList;
+            this.init(source);
         },
         mounted() {
             this.startInterval();
         },
         methods: {
+            getTimeByIndex:function(obj,index){
+                try {
+                    return this.timestamp2date(this.timeList[obj][index]);
+                }catch (e){
+                    return NaN;
+                }
+            },
+            //初始化时间集合
+            init:function(source){
+                timeList = [];
+                //取出所有的时间
+                this.getTime(source,timeList,"expiry");
+                this.timeList = timeList;
+            },
             /**
              * 根据传入的key获取时间
              * @param obj   需要获取时间对象
@@ -154,51 +211,76 @@
             },
             //倒计时：根据时间数组倒计时
             countdown: function () {
+                //计时器每次更新时都对源进行判断
+                if(this.sourceFlag){
+                    let source = [];
+                    for(let tmp in this.source){
+                        source[tmp] = this.source[tmp];
+                    }
+                    this.source = source;
+                    this.init(this.source);
+                    this.sourceFlag = false;
+                    console.log(this.source.fissures);
+                }
+
                 let temp = [];
                 let timeList = this.timeList;
-                // this.resolveTimeList(timeList,"source");
                 for(let tmp in timeList){
-                    temp[tmp] = this.resolveTimeList(timeList[tmp],tmp);
+                    timeList[tmp] = this.resolveTimeList(timeList[tmp],tmp);
                 }
                 for(let tmp in timeList){
                     temp[tmp] = timeList[tmp];
                 }
+
                 this.timeList = temp;
+                // console.log(this.timeList);
+                // console.log(this.source);
             },
             /**
              * 将时间数组解析自减
              */
             resolveTimeList:function(time,key){
-                for(let tmp in time){
-                    if(time[tmp] instanceof Array){
-                        this.resolveTimeList(time[tmp],tmp);
-                    }else{
-                        console.log(time,key);
-                        if(time[tmp]){
-                            time[tmp] -= 1000;
-                            if(time[tmp] < 0 && this.num > 0){
-                                this.num--;
-                                this.reflushSource(key);
-                            }
+                if(time instanceof Array){
+                    for(let tmp in time){
+                        time[tmp] = this.resolveTimeList(time[tmp],key);
+                    }
+                }else{
+                    if(time){
+                        if(time < 0 ){
+                            this.reflushSource(key);
                         }
+                        time -=1000;
+                    }else{
+                        time = 99999999;
                     }
                 }
+                return time;
             },
             /**
              *  当时间失效时，强制更新时间
              */
             reflushSource:function(key){
-                console.log("当前更新", this.servlet + "index/index/updateInterval?key="+key)
+                //通过标记防止一次性多次重复调用更新接口
+                if(!this.requestList[key]){
+                    console.log("更新",key);
+                    this.requestList[key] = true;
+                    this.updateSource(key);
+                }
+
+            },
+            updateSource:function(key){
+                let _this = this;
                 $.ajax({
-                    url:this.servlet + "index/index/updateInterval?key="+key,
+                    url:_this.servlet + "index/index/updateInterval?key="+key,
                     method:"get",
                     success:res=>{
-                        console.log(res);
+                        _this.source[key] = JSON.parse(res);
+                        _this.sourceFlag = true;
+                        _this.requestList[key] = false;
                     }
-                })
+                });
             },
             startInterval: function () {
-                console.log("启动定时器");
                 this.timer = setInterval(this.countdown, 1000);
             }
         }

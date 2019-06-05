@@ -42,7 +42,7 @@ function cron($type,$flag = false){
             $result = curl(config("url.api_host").config("interface.".$type));
 
             if($data){
-                Db::table("source")->where('id',$type)->update(["context"=>$data]);
+                Db::table("source")->where('id',$type)->update(["context"=>$result]);
             }else {
                 Db::table("source")->insert([
                     "id" => $type,
