@@ -15,34 +15,63 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <div>集团</div>
-                <div v-for="item in source.syndicateMissions" class="col-md-6">
-
+                <div id="voidTrader">
+                    <div>{{source.voidTrader}}</div>
+                    {{source.voidTrader.character}}于{{timestamp2date(timeList.voidTrader.activation)}}后{{source.voidTrader.active?"离开":"降临"}}
+                    于{{timestamp2date(timeList.voidTrader.expiry)}}后{{source.voidTrader.active?"降临":"离开"}}
+                </div>
+                <div v-if="source.voidTrader.inventory.length > 0">
+                    <div>带来的商品：</div>
+                    <div v-for="item in source.voidTrader.inventory" class="col-md-3">
+                        {{item}}
+                    </div>
                 </div>
             </div>
         </div>
 
         <div class="row">
             <div class="col-md -12">
-                <div class="row">
-                    <div id="cetusCycle">
-                        <div>希图斯</div>
-                        <div>距离{{source.cetusCycle.isDay?"黑夜":"白天"}}还有 {{timestamp2date(timeList.cetusCycle)}}</div>
-                    </div>
+                <div id="cetusCycle">
+                    <div>希图斯</div>
+                    <div>距离{{source.cetusCycle.isDay?"黑夜":"白天"}}还有 {{timestamp2date(timeList.cetusCycle)}}</div>
                 </div>
-
-                    <div>konzo的工作</div>
-                    <div id="syndicateMissions">
-                        <div class="col-md-3">
-
-                        </div>
-                        <div>{{source.syndicateMissions}}</div>
-                    </div>
+                <div id="vallisCycle">
+                    <div>福图纳</div>
+                    <div>距离{{source.vallisCycle.isWarm?"寒冷":"温暖"}}还有 {{timestamp2date(timeList.vallisCycle)}}</div>
+                </div>
             </div>
         </div>
 
-        <div class="col-md-12">
-            <div class="col-md-6">
+        <div class="row">
+            <div id="syndicateMissions">
+                <div>集团任务</div>
+
+                <div v-for="(syndicateMission,index) in source.syndicateMissions" class="col-md-12">
+                    <div>剩余时间：{{getTimeByIndex("syndicateMissions",index)}}</div>
+                    <div>集团：{{syndicateMission.syndicate}}</div>
+                    <div v-if="syndicateMission.nodes.length > 0" class="col-md-12">
+                        <div>任务节点</div>
+                        <div v-for="node in syndicateMission.nodes" class="col-md-4">
+                            {{node}}
+                        </div>
+                    </div>
+                    <div v-if="syndicateMission.jobs.length > 0">
+                        <div v-for="job in syndicateMission.jobs" class="col-md-6">
+                            <div>任务类型：{{job.type}}</div>
+                            <div>敌人等级：{{job.enemyLevels}}</div>
+                            <div>奖池</div>
+                            <div v-for="reward in job.rewardPool" class="col-md-6">
+                                {{reward}}
+                            </div>
+                        </div>
+                    </div>
+                    <br/>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
                 <div id="sortie">
                     <div>突击</div>
                     <div>{{timestamp2date(timeList.sortie)}}</div>
@@ -59,8 +88,6 @@
                 </div>
             </div>
         </div>
-
-
 
         <div class="col-md-12">
             <div class="col-md-10">
@@ -110,15 +137,6 @@
                 </div>
             </div>
         </div>
-
-
-
-        <!--<div id="vallisCycle">-->
-        <!--<div>{{vallisCycle}}</div>-->
-        <!--</div>-->
-        <!--<div id="voidTrader">-->
-        <!--<div>{{timestamp2date(voidTrader)}}</div>-->
-        <!--</div>-->
     </div>
 </div>
 <script>
@@ -127,7 +145,6 @@
         data: {
             servlet:'{$servlet}',
             source:null,
-            sourceFlag:false,
             timer: null,
             timeList: null,
             requestList:[],
@@ -151,6 +168,12 @@
             this.startInterval();
         },
         methods: {
+            anchor:function(href){
+                return '#'+href;
+            },
+            formatID:function(id){
+                return id.substr(14);
+            },
             getTimeByIndex:function(obj,index){
                 try {
                     return this.timestamp2date(this.timeList[obj][index]);
@@ -179,7 +202,15 @@
                         this.getTime(obj[tmp],list[tmp],key);
                     }else{
                         if(obj[tmp][key]){
-                            list[tmp] = this.str2timestamp(obj[tmp][key]) - (new Date()).getTime();
+                            if(tmp === "voidTrader"){
+                                list[tmp]=[];
+                                list[tmp]["activation"] = this.str2timestamp(obj[tmp]["activation"]) - (new Date()).getTime();
+                                // list[tmp] = this.str2timestamp(obj[tmp]["activation"]) - (new Date()).getTime();
+                                list[tmp][key] = this.str2timestamp(obj[tmp][key]) - (new Date()).getTime();
+                                // console.log(list);
+                            }else {
+                                list[tmp] = this.str2timestamp(obj[tmp][key]) - (new Date()).getTime();
+                            }
                         }
                     }
                 }
@@ -201,6 +232,7 @@
                 time = Math.floor(time / 1000);
                 let hour = Math.floor(time / 3600);
                 if (hour > 24) {
+                    date = Math.floor(hour / 24) + "天";
                     hour = hour % 24;
                 }
                 let minute = Math.floor(time % 3600 / 60);
@@ -211,18 +243,6 @@
             },
             //倒计时：根据时间数组倒计时
             countdown: function () {
-                //计时器每次更新时都对源进行判断
-                if(this.sourceFlag){
-                    let source = [];
-                    for(let tmp in this.source){
-                        source[tmp] = this.source[tmp];
-                    }
-                    this.source = source;
-                    this.init(this.source);
-                    this.sourceFlag = false;
-                    console.log(this.source.fissures);
-                }
-
                 let temp = [];
                 let timeList = this.timeList;
                 for(let tmp in timeList){
@@ -233,8 +253,7 @@
                 }
 
                 this.timeList = temp;
-                // console.log(this.timeList);
-                // console.log(this.source);
+
             },
             /**
              * 将时间数组解析自减
@@ -262,21 +281,31 @@
             reflushSource:function(key){
                 //通过标记防止一次性多次重复调用更新接口
                 if(!this.requestList[key]){
-                    console.log("更新",key);
                     this.requestList[key] = true;
                     this.updateSource(key);
                 }
 
             },
             updateSource:function(key){
+                console.log("开始更新",key);
                 let _this = this;
                 $.ajax({
                     url:_this.servlet + "index/index/updateInterval?key="+key,
                     method:"get",
                     success:res=>{
-                        _this.source[key] = JSON.parse(res);
-                        _this.sourceFlag = true;
-                        _this.requestList[key] = false;
+                        try{
+                            _this.source[key] = JSON.parse(JSON.parse(res));
+                            let source = [];
+                            for(let tmp in _this.source){
+                                source[tmp] = _this.source[tmp];
+                            }
+                            _this.source = source;
+                            _this.init(source);
+                            _this.requestList[key] = false;
+                        }catch(e){
+                            console.log(key + "在更新时出现了问题 ");
+                        }
+
                     }
                 });
             },
