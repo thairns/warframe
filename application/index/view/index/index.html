@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>warframe</title>
     <link rel="stylesheet" href="__plugins__/bootstrap/css/bootstrap.css">
     <script src="__JS__/jquery-3.4.1.min.js"></script>
     <script src="__JS__/vue.min.js"></script>
@@ -16,8 +16,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div id="voidTrader">
-                    <div>{{source.voidTrader}}</div>
-                    {{source.voidTrader.character}}于{{timestamp2date(timeList.voidTrader.activation)}}后{{source.voidTrader.active?"离开":"降临"}}
+                    {{source.voidTrader.character}}于{{timestamp2date(timeList.voidTrader.activation)}}后{{source.voidTrader.active?"离开":"降临"}}<br/>
                     于{{timestamp2date(timeList.voidTrader.expiry)}}后{{source.voidTrader.active?"降临":"离开"}}
                 </div>
                 <div v-if="source.voidTrader.inventory.length > 0">
@@ -93,7 +92,7 @@
             <div class="col-md-10">
                 <div id="fissures">
                     <div>裂隙</div>
-                    <div v-for="(item,index) in source.fissures" class="col-md-2">
+                    <div v-for="(item,index) in source.fissures" class="col-md-3">
                         <p>
                         <div>地点：{{item.node}}</div>
                         <div>派系：{{item.enemy}}</div>
@@ -157,7 +156,10 @@
                 try{
                     source[tmp] = JSON.parse(source[tmp]);
                 }catch(e){
-                    console.log(tmp + "内容存在问题");
+                    console.log("-----"+ tmp + "内容存在问题" +"-----");
+                    console.log(source,tmp);
+                    console.log(e);
+                    console.log("------------------------------------");
                     this.reflushSource(tmp);
                 }
             }
@@ -168,12 +170,9 @@
             this.startInterval();
         },
         methods: {
-            anchor:function(href){
-                return '#'+href;
-            },
-            formatID:function(id){
-                return id.substr(14);
-            },
+            /**
+             * 通过传入关键字与下标获取时间
+             */
             getTimeByIndex:function(obj,index){
                 try {
                     return this.timestamp2date(this.timeList[obj][index]);
@@ -205,9 +204,7 @@
                             if(tmp === "voidTrader"){
                                 list[tmp]=[];
                                 list[tmp]["activation"] = this.str2timestamp(obj[tmp]["activation"]) - (new Date()).getTime();
-                                // list[tmp] = this.str2timestamp(obj[tmp]["activation"]) - (new Date()).getTime();
                                 list[tmp][key] = this.str2timestamp(obj[tmp][key]) - (new Date()).getTime();
-                                // console.log(list);
                             }else {
                                 list[tmp] = this.str2timestamp(obj[tmp][key]) - (new Date()).getTime();
                             }

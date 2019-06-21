@@ -2,9 +2,19 @@
 namespace app\index\controller;
 
 use think\Controller;
+use think\Cookie;
+use think\Lang;
 
 class Index extends Controller
 {
+    public function _initialize()
+    {
+        parent::_initialize();
+        $lang = Lang::range("zh-cn");//设定当前语言
+        Lang::load(ROOT_PATH.'lang'.DS.$lang.DS.$lang.EXT,$lang);//加载当前语言包
+        Cookie::set('think_var',$lang);
+    }
+
     public function index()
     {
         $this->assign("servlet",DS.config("servlet").DS);
@@ -27,7 +37,8 @@ class Index extends Controller
         return json_encode(cron($key,true));
     }
     public function hello(){
-       $this->assign("result","stop interval success<br>");
+
+        $this->assign("result","Speed Trigger");
         return $this->fetch();
     }
 }
