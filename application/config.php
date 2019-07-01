@@ -144,10 +144,7 @@ return [
 
     // 视图输出字符串内容替换
     'view_replace_str'       => [
-        '__CSS__'   => 'public'. DS . 'static'. DS . 'css',
-        '__JS__'   => 'public'. DS . 'static'. DS . 'js',
-        '__IMG__'   => 'public'. DS . 'static'. DS . 'img',
-        '__plugins__'   =>  'public'.DS.'static'.DS.'plugins'
+        '__PUBLIC__'=>DS.'warframe'.DS.'public'.DS.'static'
     ],
     // 默认跳转页面对应的模板文件
     'dispatch_success_tmpl'  => THINK_PATH . 'tpl' . DS . 'dispatch_jump.tpl',

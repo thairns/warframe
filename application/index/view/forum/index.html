@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>信息页面</title>
+    <link rel="stylesheet" href="__PUBLIC__/plugins/bootstrap/css/bootstrap.css">
+    <script src="__PUBLIC__/js/jquery-3.4.1.min.js"></script>
+    <script src="__PUBLIC__/js/vue.min.js"></script>
+    <script src="__PUBLIC__/plugins/bootstrap/js/bootstrap.js"></script>
+</head>
+<body>
+<div id="main">
+    <div class="container">
+        <div class="row">
+            <div class="span6">
+                <ul class="nav nav-tabs">
+                    <li><a href="/warframe/index/index/index.html">Home</a></li>
+                    <li class="active"><a href="/warframe/index/forum/index.html">Forum</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3 col-md-offset-7">
+                <div class="btn">发布文章</div>
+            </div>
+        </div>
+        <div class="row">
+
+        </div>
+    </div>
+    <div>{{message}}</div>
+</div>
+
+
+<script type="text/javascript">
+    new Vue({
+        el:"#main",
+        data:{
+            message:"{$message}"
+        }
+    });
+    $(function(){
+
+    });
+</script>
+</body>
+</html>
