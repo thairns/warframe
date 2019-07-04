@@ -17,4 +17,8 @@ class Forum extends Controller{
         return $this->fetch();
     }
 
+    public function upload(){
+        (new Upload())->uploadImage();
+    }
+
 }
