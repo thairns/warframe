@@ -29,7 +29,7 @@
         </div>
         <div class="row">
             <div class="col-md-3 col-md-offset-7">
-                <div class="btn">发布文章</div>
+                <a href="/warframe/index/forum/edit.html">发布文章</div>
             </div>
         </div>
         <div class="row">
@@ -56,6 +56,9 @@
             height:500,
             syncScrolling:"single",
             path:"__PUBLIC__/plugins/editor/lib/",
+            toolbarIcons:function(){
+                return editormd.toolbarModes["full"]
+            },
             imageUpload:true,
             imageFormats:["jpg","jpeg","gif","png","bmp"],
             imageUploadURL:"upload.html"

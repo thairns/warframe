@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>发布帖子</title>
+    <!--css-->
+    <link rel="stylesheet" href="__PUBLIC__/plugins/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="__PUBLIC__/plugins/editor/css/editormd.css">
+
+    <!-- jquery -->
+    <script src="__PUBLIC__/js/jquery-3.4.1.min.js"></script>
+    <!--vue-->
+    <script src="__PUBLIC__/js/vue.min.js"></script>
+    <!--bootstrap-->
+    <script src="__PUBLIC__/plugins/bootstrap/js/bootstrap.js"></script>
+    <!--editor.md-->
+    <script src="__PUBLIC__/plugins/editor/js/editormd.js"></script>
+
+    <style type="text/css">
+        .article-title__input {
+            width: 92%;
+            line-height: 24px;
+            font-size: 18px;
+            padding: 8px;
+            outline: none;
+        }
+
+        .text-input {
+            border: 0;
+            border-radius: 4px;
+        }
+
+        .article-bar__input-box {
+            margin: 8px 24px;
+            border: 1px solid #CCC;
+            border-radius: 4px;
+        }
+
+        .btn-publish {
+            padding: 0 16px;
+            font-size: 16px;
+            line-height: 24px;
+            color: #FFF;
+            border: none;
+            border-radius: 4px;
+            background-color: #ca0c16;
+        }
+
+        .article-bar__submit {
+            padding: 8px 32px 8px 0;
+            width: 232px;
+        }
+    </style>
+</head>
+<body>
+<div class="main">
+    <div class="article-bar flex flex--row">
+        <div class="article-bar__input-box"><input maxlength="100" placeholder="输入文章标题"
+                                                   class="article-bar__title article-bar__title--input text-input">
+            <span class="article-bar__number"><span class="">0</span>/100</span></div>
+        <div class="article-bar__user-box flex flex--row">
+            <button class="btn btn-publish">发布文章</button>
+            <div class="user-box">
+                <div class="btn-userinfo">
+                    <div class="avatar-box"><a href="https://mp.csdn.net"><img
+                            src="https://avatar.csdn.net/6/D/A/3_athain.jpg" alt="Athain" width="32" height="32"
+                            class="img-user-avatar"> <!----></a></div>
+                    <div class="user-option-box"><a href="https://mp.csdn.net">博文管理</a> <a
+                            href="https://blog.csdn.net/Athain">我的博客</a> <a
+                            href="https://passport.csdn.net/account/logout?ref=mdeditor">退出</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>
