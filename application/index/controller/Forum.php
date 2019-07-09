@@ -25,4 +25,8 @@ class Forum extends Controller{
         return $this->fetch();
     }
 
+    public function submit(){
+
+    }
+
 }

@@ -77,7 +77,11 @@
         lineNumbers:false,
         lineWrapping:false,
         styleActiveLine:false,
-        styleSelectedText:false
+        styleSelectedText:false,
+        onload: function(){
+            console.log(this.settings);
+        },
+        saveHTMLToTextarea:true
     });
 
     function submit(){
