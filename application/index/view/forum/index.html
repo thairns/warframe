@@ -29,17 +29,10 @@
         </div>
         <div class="row">
             <div class="col-md-3 col-md-offset-7">
-                <a href="/warframe/index/forum/edit.html">发布文章</div>
+                <a href="/warframe/index/forum/edit.html">发布文章</a>
             </div>
-        </div>
-        <div class="row">
-            <div class="submit" onclick="submit()">
-                提交
-            </div>
-            <div id="editor"></div>
         </div>
     </div>
-    <div>{{message}}</div>
 </div>
 
 
@@ -50,24 +43,8 @@
             message:"{$message}"
         }
     });
-    let editor = editormd("editor",{
-            placeholder:"please input you content...",
-            width:"100%",
-            height:500,
-            syncScrolling:"single",
-            path:"__PUBLIC__/plugins/editor/lib/",
-            toolbarIcons:function(){
-                return editormd.toolbarModes["full"]
-            },
-            imageUpload:true,
-            imageFormats:["jpg","jpeg","gif","png","bmp"],
-            imageUploadURL:"upload.html"
-    });
 
-    function submit(){
-        console.log(editor.getHTML());
-        console.log(editor.getPreviewedHTML());
-    }
+
 
 </script>
 </body>

@@ -33,7 +33,7 @@
                     <span class="article-bar__number"><span class="">0</span>/100</span>
                 </div>
                 <div class="article-bar__user-box flex flex--row">
-                    <button class="btn btn-publish">发布文章</button>
+                    <button class="btn btn-publish" onclick="submit()">发布文章</button>
                     <div class="user-box">
                         <!--<div class="btn-userinfo">-->
                             <!--<div class="avatar-box">-->
@@ -77,11 +77,13 @@
         lineNumbers:false,
         lineWrapping:false,
         styleActiveLine:false,
-        styleSelectedText:false,
-        onchange:function(){
-            console.log(this.settings);
-        }
+        styleSelectedText:false
     });
+
+    function submit(){
+        console.log(editor.getHTML());
+        console.log(editor.getPreviewedHTML());
+    }
 </script>
 </body>
 </html>
