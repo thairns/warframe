@@ -5,6 +5,9 @@ use think\Controller;
 use think\Cookie;
 use think\Lang;
 
+/**
+ * 这是首页对外接口页面
+ */
 class Index extends Controller
 {
     public function _initialize()
@@ -22,7 +25,8 @@ class Index extends Controller
             "cetusCycle","fissures",
             "invasions","sortie",
             "syndicateMissions","vallisCycle",
-            "voidTrader"
+            "voidTrader","arbitration",
+            "kuva","nightwave"
         ];
         $source = array();
         foreach($list as  $tmp){

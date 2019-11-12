@@ -8,7 +8,9 @@
 
 namespace app\index\controller;
 
-
+/**
+ * 文件上传类
+ */
 class Upload{
     /**
      * 图片上传

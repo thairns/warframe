@@ -144,7 +144,10 @@ return [
 
     // 视图输出字符串内容替换
     'view_replace_str'       => [
-        '__PUBLIC__'=>DS.'warframe'.DS.'public'.DS.'static'
+        '__PUBLIC__'=>DS.'warframe'.DS.'public'.DS.'static',
+        '__JS__'=>DS.'warframe'.DS.'public'.DS.'static'.DS.'js',
+        '__CSS__'=>DS.'warframe'.DS.'public'.DS.'static'.DS.'css',
+        '__plugins__'=>DS.'warframe'.DS.'public'.DS.'static'.DS.'plugins'
     ],
     // 默认跳转页面对应的模板文件
     'dispatch_success_tmpl'  => THINK_PATH . 'tpl' . DS . 'dispatch_jump.tpl',
@@ -266,14 +269,16 @@ return [
         "globalUpgrades"        =>  "pc/globalUpgrades",    //活动buff？
         "invasions"             =>  "pc/invasions",         //入侵任务
         "news"                  =>  "pc/news",              //新闻
-        "nightwave"             =>  "pc/nightwave",         //土星之狼？
-        "rivens"                =>  "pc/rivens",//武器紫卡倾向？        /rivens/search/{weapons}
+        "nightwave"             =>  "pc/nightwave",         //午夜电波
         "sortie"                =>  "pc/sortie",            //突击
+        "kuva"                  =>  "pc/kuva",              //赤毒
+        "arbitration"           =>  "pc/arbitration",       //仲裁
         "syndicateMissions"     =>  "pc/syndicateMissions", //希图斯日常任务
         "timestamp"             =>  "pc/timestamp",         //最近一次生成世界数据时间
         "vallisCycle"           =>  "pc/vallisCycle",       //福图纳冷热循环
         "voidTrader"            =>  "pc/voidTrader",        //虚空商人
 
+        "rivens"                =>  "pc/rivens",            //武器紫卡倾向？        /rivens/search/{weapons}
         "arcanes"               =>  "arcanes",              //赋能
         "fissureModifiers"      =>  "fissureModifiers",     //裂隙翻译转换
         "factions"              =>  "factions",             //阵营转换

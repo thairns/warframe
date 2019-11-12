@@ -35,13 +35,16 @@ function curl($url, $post=''){
 }
 //定时任务
 /**
- * @param $type         根据key来获取数据
+ * @param $type
  * @param bool $flag    是否直接到源获取数据
  * @return mixed|string
  */
 function cron($type,$flag = false){
 
     try {
+        /**
+         * 首先从数据库查找
+         */
         $data = Db::table("source")->where("id", $type)->find();
         if (!$data || $flag) {
             $result = curl(config("url.api_host").config("interface.".$type));

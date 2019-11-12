@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>warframe</title>
-    <link rel="stylesheet" href="/__plugins__/bootstrap/css/bootstrap.css">
-    <script src="/__JS__/jquery-3.4.1.min.js"></script>
-    <script src="/__JS__/vue.min.js"></script>
-    <script src="/__plugins__/bootstrap/js/bootstrap.js"></script>
+    <link rel="stylesheet" href="__plugins__/bootstrap/css/bootstrap.css">
+    <script src="__JS__/jquery-3.4.1.min.js"></script>
+    <script src="__JS__/vue.min.js"></script>
+    <script src="__plugins__/bootstrap/js/bootstrap.js"></script>
 </head>
 <body>
 <div id="main">
@@ -94,50 +94,52 @@
             </div>
         </div>
 
-        <div class="col-md-12">
-            <div class="col-md-10">
-                <div id="fissures">
-                    <div>裂隙</div>
-                    <div v-for="(item,index) in source.fissures" class="col-md-3">
-                        <p>
-                        <div>地点：{{item.node}}</div>
-                        <div>派系：{{item.enemy}}</div>
-                        <div>任务类型：{{item.missionType}}</div>
-                        <div>纪元：{{item.tier}}(T{{item.tierNum}})</div>
-                        <div>剩余时间：{{getTimeByIndex("fissures",index)}}</div>
-                        </p>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="col-md-10">
+                    <div id="fissures">
+                        <div>裂隙</div>
+                        <div v-for="(item,index) in source.fissures" class="col-md-3">
+                            <p>
+                            <div>地点：{{item.node}}</div>
+                            <div>派系：{{item.enemy}}</div>
+                            <div>任务类型：{{item.missionType}}</div>
+                            <div>纪元：{{item.tier}}(T{{item.tierNum}})</div>
+                            <div>剩余时间：{{getTimeByIndex("fissures",index)}}</div>
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="col-md-12">
-            <div class="col-md-10">
-                <div id="invasions">
-                    <div>入侵</div>
-                    <div v-for="item in source.invasions" class="col-md-3">
-                        <p>
-                        <div>地点：{{item.node}}</div>
-                        <div>说明：{{item.desc}}</div>
-                        <div v-if="!item.vsInfestation">
-                            <div>进攻方</div>
-                            <div>奖励：
-                                <div v-for="reward in item.attackerReward.countedItems">
-                                    {{reward.count}}×{{reward.type}}
+            <div class="col-md-12">
+                <div class="col-md-10">
+                    <div id="invasions">
+                        <div>入侵</div>
+                        <div v-for="item in source.invasions" class="col-md-3">
+                            <p>
+                            <div>地点：{{item.node}}</div>
+                            <div>说明：{{item.desc}}</div>
+                            <div v-if="!item.vsInfestation">
+                                <div>进攻方</div>
+                                <div>奖励：
+                                    <div v-for="reward in item.attackerReward.countedItems">
+                                        {{reward.count}}×{{reward.type}}
+                                    </div>
                                 </div>
+                                <div>派系：{{item.attackingFaction}}</div>
                             </div>
-                            <div>派系：{{item.attackingFaction}}</div>
-                        </div>
-                        <div>
-                            <div>防守方</div>
-                            <div>奖励：
-                                <div v-for="reward in item.defenderReward.countedItems">
-                                    {{reward.count}}×{{reward.type}}
+                            <div>
+                                <div>防守方</div>
+                                <div>奖励：
+                                    <div v-for="reward in item.defenderReward.countedItems">
+                                        {{reward.count}}×{{reward.type}}
+                                    </div>
                                 </div>
+                                <div>派系：{{item.defendingFaction}}</div>
                             </div>
-                            <div>派系：{{item.defendingFaction}}</div>
+                            </p>
                         </div>
-                        </p>
                     </div>
                 </div>
             </div>
@@ -148,22 +150,22 @@
     new Vue({
         el: "#main",
         data: {
-            servlet:'{$servlet}',
-            source:null,
+            servlet: '{$servlet}',
+            source: null,
             timer: null,
             timeList: null,
-            requestList:[],
-            num:5
+            requestList: [],
+            num: 5
         },
         created() {
             //取到所有数据
             let source = {$source};
-            for(let tmp in source){
-                try{
+            for (let tmp in source) {
+                try {
                     source[tmp] = JSON.parse(source[tmp]);
-                }catch(e){
-                    console.log("-----"+ tmp + "内容存在问题" +"-----");
-                    console.log(source,tmp);
+                } catch (e) {
+                    console.log("-----" + tmp + "内容存在问题" + "-----");
+                    console.log(source, tmp);
                     console.log(e);
                     console.log("------------------------------------");
                     this.reflushSource(tmp);
@@ -179,18 +181,18 @@
             /**
              * 通过传入关键字与下标获取时间
              */
-            getTimeByIndex:function(obj,index){
+            getTimeByIndex: function (obj, index) {
                 try {
                     return this.timestamp2date(this.timeList[obj][index]);
-                }catch (e){
+                } catch (e) {
                     return NaN;
                 }
             },
             //初始化时间集合
-            init:function(source){
+            init: function (source) {
                 timeList = [];
                 //取出所有的时间
-                this.getTime(source,timeList,"expiry");
+                this.getTime(source, timeList, "expiry");
                 this.timeList = timeList;
             },
             /**
@@ -200,18 +202,18 @@
              * @param key   需要获取的字段
              * @returns {*}
              */
-            getTime:function(obj,list,key){
-                for(let tmp in obj){
-                    if(obj[tmp] instanceof Array){
+            getTime: function (obj, list, key) {
+                for (let tmp in obj) {
+                    if (obj[tmp] instanceof Array) {
                         list[tmp] = [];
-                        this.getTime(obj[tmp],list[tmp],key);
-                    }else{
-                        if(obj[tmp][key]){
-                            if(tmp === "voidTrader"){
-                                list[tmp]=[];
+                        this.getTime(obj[tmp], list[tmp], key);
+                    } else {
+                        if (obj[tmp][key]) {
+                            if (tmp === "voidTrader") {
+                                list[tmp] = [];
                                 list[tmp]["activation"] = this.str2timestamp(obj[tmp]["activation"]) - (new Date()).getTime();
                                 list[tmp][key] = this.str2timestamp(obj[tmp][key]) - (new Date()).getTime();
-                            }else {
+                            } else {
                                 list[tmp] = this.str2timestamp(obj[tmp][key]) - (new Date()).getTime();
                             }
                         }
@@ -248,10 +250,10 @@
             countdown: function () {
                 let temp = [];
                 let timeList = this.timeList;
-                for(let tmp in timeList){
-                    timeList[tmp] = this.resolveTimeList(timeList[tmp],tmp);
+                for (let tmp in timeList) {
+                    timeList[tmp] = this.resolveTimeList(timeList[tmp], tmp);
                 }
-                for(let tmp in timeList){
+                for (let tmp in timeList) {
                     temp[tmp] = timeList[tmp];
                 }
 
@@ -261,18 +263,18 @@
             /**
              * 将时间数组解析自减
              */
-            resolveTimeList:function(time,key){
-                if(time instanceof Array){
-                    for(let tmp in time){
-                        time[tmp] = this.resolveTimeList(time[tmp],key);
+            resolveTimeList: function (time, key) {
+                if (time instanceof Array) {
+                    for (let tmp in time) {
+                        time[tmp] = this.resolveTimeList(time[tmp], key);
                     }
-                }else{
-                    if(time){
-                        if(time < 0 ){
+                } else {
+                    if (time) {
+                        if (time < 0) {
                             this.reflushSource(key);
                         }
-                        time -=1000;
-                    }else{
+                        time -= 1000;
+                    } else {
                         time = 99999999;
                     }
                 }
@@ -281,31 +283,32 @@
             /**
              *  当时间失效时，强制更新时间
              */
-            reflushSource:function(key){
+            reflushSource: function (key) {
                 //通过标记防止一次性多次重复调用更新接口
-                if(!this.requestList[key]){
+                if (!this.requestList[key]) {
+                    console.log(this.requestList,key);
                     this.requestList[key] = true;
                     this.updateSource(key);
                 }
 
             },
-            updateSource:function(key){
-                console.log("开始更新",key);
+            updateSource: function (key) {
+                console.log("开始更新", key);
                 let _this = this;
                 $.ajax({
-                    url:_this.servlet + "index/index/updateInterval?key="+key,
-                    method:"get",
-                    success:res=>{
-                        try{
+                    url: _this.servlet + "index/index/updateInterval?key=" + key,
+                    method: "get",
+                    success: res => {
+                        try {
                             _this.source[key] = JSON.parse(JSON.parse(res));
                             let source = [];
-                            for(let tmp in _this.source){
+                            for (let tmp in _this.source) {
                                 source[tmp] = _this.source[tmp];
                             }
                             _this.source = source;
                             _this.init(source);
                             _this.requestList[key] = false;
-                        }catch(e){
+                        } catch (e) {
                             console.log(key + "在更新时出现了问题 ");
                         }
 
@@ -317,8 +320,6 @@
             }
         }
     });
-
-
 </script>
 </body>
 </html>

@@ -14,6 +14,9 @@ use think\Cookie;
 use think\Exception;
 use think\Lang;
 
+/**
+ * 对源数据进行格式化
+ */
 class Source extends Controller
 {
     public function _initialize()
