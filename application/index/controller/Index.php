@@ -26,7 +26,8 @@ class Index extends Controller
             "invasions","sortie",
             "syndicateMissions","vallisCycle",
             "voidTrader","arbitration",
-            "kuva","nightwave"
+            "kuva","nightwave",
+            "sentientOutposts"
         ];
         $source = array();
         foreach($list as  $tmp){

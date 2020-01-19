@@ -144,10 +144,11 @@ return [
 
     // 视图输出字符串内容替换
     'view_replace_str'       => [
-        '__PUBLIC__'=>DS.'warframe'.DS.'public'.DS.'static',
-        '__JS__'=>DS.'warframe'.DS.'public'.DS.'static'.DS.'js',
-        '__CSS__'=>DS.'warframe'.DS.'public'.DS.'static'.DS.'css',
-        '__plugins__'=>DS.'warframe'.DS.'public'.DS.'static'.DS.'plugins'
+        '__ROOT__'      =>  ROOT_RELATIVE_PATH,
+        '__PUBLIC__'    =>  ROOT_RELATIVE_PATH.DS.'public'.DS.'static',
+        '__JS__'        =>  ROOT_RELATIVE_PATH.DS.'public'.DS.'static'.DS.'js',
+        '__CSS__'       =>  ROOT_RELATIVE_PATH.DS.'public'.DS.'static'.DS.'css',
+        '__plugins__'   =>  ROOT_RELATIVE_PATH.DS.'public'.DS.'static'.DS.'plugins'
     ],
     // 默认跳转页面对应的模板文件
     'dispatch_success_tmpl'  => THINK_PATH . 'tpl' . DS . 'dispatch_jump.tpl',
@@ -284,7 +285,8 @@ return [
         "factions"              =>  "factions",             //阵营转换
         "missionTypes"          =>  "missionTypes",         //任务标记识别
         "warframes"             =>  "warframes",            //战甲
-        "weapons"               =>  "weapons"               //武器
+        "weapons"               =>  "weapons",              //武器
+        "sentientOutposts"      =>  "pc/sentientOutposts"      //Sentient飞船
     ],
 
     'url'   =>  [

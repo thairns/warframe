@@ -12,6 +12,7 @@
 // 应用公共文件
 //参数1：访问的URL，参数2：post数据(不填则为GET)
 use think\Db;
+use think\Log;
 
 function curl($url, $post=''){
     $curl = curl_init();
@@ -36,17 +37,22 @@ function curl($url, $post=''){
 //定时任务
 /**
  * @param $type
- * @param bool $flag    是否直接到源获取数据
+ * @param bool $flag 是否直接到源获取数据
+ * @param int $tag
  * @return mixed|string
  */
-function cron($type,$flag = false){
-
+function cron($type,$flag = false, $tag = 0){
+    if($tag > 2){
+        return false;
+    }
     try {
         /**
          * 首先从数据库查找
          */
         $data = Db::table("source")->where("id", $type)->find();
-        if (!$data || $flag) {
+
+        //如果没有数据就根据配置去官方接口获取
+        if (!$data || $flag ) {
             $result = curl(config("url.api_host").config("interface.".$type));
 
             try{
@@ -59,14 +65,17 @@ function cron($type,$flag = false){
 
             try{
                 if(strlen($result) > 0) {
-                    if ($data) {
-                        Db::table("source")->where('id', $type)->update(["context" => $result]);
-                    } else {
-                        Db::table("source")->insert([
-                            "id" => $type,
-                            "context" => $result
-                        ]);
+                    if(!isset((json_decode($data['context'], true))['error'])){
+                        if ($data) {
+                            Db::table("source")->where('id', $type)->update(["context" => $result]);
+                        } else {
+                            Db::table("source")->insert([
+                                "id" => $type,
+                                "context" => $result
+                            ]);
+                        }
                     }
+
                 }
             }catch (Exception $e){
                 print("错误开始：".$e."\t End<br/>");
@@ -83,6 +92,7 @@ function cron($type,$flag = false){
 /**
  * 将传入对象递归取得value
  * 然后通过lang获取对应数据
+ * @param $obj
  */
 function getLang(&$obj){
     foreach($obj as $key=>&$tmp){
